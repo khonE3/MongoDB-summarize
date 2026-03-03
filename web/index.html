@@ -1,0 +1,1149 @@
+<!doctype html>
+<html lang="th">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>MongoDB Interactive Examples</title>
+    <meta
+      name="description"
+      content="ตัวอย่างการใช้งาน MongoDB แบบ Interactive - เรียนรู้ CRUD, Aggregation, Indexing และอื่นๆ"
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <!-- Ambient background effects -->
+    <div class="ambient-bg">
+      <div class="orb orb-1"></div>
+      <div class="orb orb-2"></div>
+      <div class="orb orb-3"></div>
+    </div>
+
+    <!-- Sidebar Navigation -->
+    <nav class="sidebar" id="sidebar">
+      <div class="sidebar-header">
+        <div class="logo">
+          <svg class="logo-icon" viewBox="0 0 32 32" fill="none">
+            <path
+              d="M16 2C8.268 2 2 8.268 2 16s6.268 14 14 14 14-6.268 14-14S23.732 2 16 2z"
+              fill="url(#grad1)"
+            />
+            <path
+              d="M16.5 7l.2 12.5c0 .5-.3 1-.8 1.2l-1.4.7c-.3.2-.5.5-.5.8v3.3c0 .3.2.5.5.5h.5c.3 0 .5-.2.5-.5v-2.8l1.4-.7c1-.5 1.6-1.5 1.6-2.5L18 7.5c0-.5-.3-.8-.8-.8s-.7.3-.7.8z"
+              fill="white"
+            />
+            <defs>
+              <linearGradient id="grad1" x1="2" y1="2" x2="30" y2="30">
+                <stop stop-color="#00ED64" />
+                <stop offset="1" stop-color="#00684A" />
+              </linearGradient>
+            </defs>
+          </svg>
+          <span class="logo-text">MongoDB<span class="accent">Lab</span></span>
+        </div>
+        <button
+          class="sidebar-toggle"
+          id="sidebarToggle"
+          aria-label="Toggle sidebar"
+        >
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor">
+            <path
+              d="M3 5h14M3 10h14M3 15h14"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+            />
+          </svg>
+        </button>
+      </div>
+      <ul class="nav-list" id="navList">
+        <li class="nav-item active" data-section="overview">
+          <span class="nav-icon">🏠</span>
+          <span class="nav-label">Overview</span>
+        </li>
+        <li class="nav-item" data-section="crud">
+          <span class="nav-icon">📝</span>
+          <span class="nav-label">CRUD Operations</span>
+        </li>
+        <li class="nav-item" data-section="query">
+          <span class="nav-icon">🔍</span>
+          <span class="nav-label">Query Operators</span>
+        </li>
+        <li class="nav-item" data-section="aggregation">
+          <span class="nav-icon">📊</span>
+          <span class="nav-label">Aggregation</span>
+        </li>
+        <li class="nav-item" data-section="indexing">
+          <span class="nav-icon">⚡</span>
+          <span class="nav-label">Indexing</span>
+        </li>
+        <li class="nav-item" data-section="modeling">
+          <span class="nav-icon">🏗️</span>
+          <span class="nav-label">Data Modeling</span>
+        </li>
+        <li class="nav-item" data-section="transactions">
+          <span class="nav-icon">🔄</span>
+          <span class="nav-label">Transactions</span>
+        </li>
+        <li class="nav-item" data-section="mongoose">
+          <span class="nav-icon">🦦</span>
+          <span class="nav-label">Mongoose ODM</span>
+        </li>
+      </ul>
+    </nav>
+
+    <!-- Mobile overlay -->
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+    <!-- Main Content -->
+    <main class="main-content" id="mainContent">
+      <!-- Header -->
+      <header class="top-bar">
+        <button class="mobile-menu" id="mobileMenu" aria-label="Open menu">
+          <svg
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+          >
+            <line x1="3" y1="6" x2="21" y2="6" />
+            <line x1="3" y1="12" x2="21" y2="12" />
+            <line x1="3" y1="18" x2="21" y2="18" />
+          </svg>
+        </button>
+        <h1 class="page-title" id="pageTitle">Overview</h1>
+        <a
+          href="https://www.mongodb.com/docs/"
+          target="_blank"
+          class="docs-link"
+          >📄 Official Docs</a
+        >
+      </header>
+
+      <!-- Sections -->
+      <div class="content-area" id="contentArea">
+        <!-- ===== OVERVIEW ===== -->
+        <section class="section active" id="section-overview">
+          <div class="hero-card">
+            <div class="hero-content">
+              <h2>
+                MongoDB Interactive <span class="gradient-text">Examples</span>
+              </h2>
+              <p>
+                เรียนรู้ MongoDB ผ่านตัวอย่างแบบ Interactive — ลองรัน query,
+                ดูผลลัพธ์, และทำความเข้าใจแต่ละ concept อย่างง่ายดาย
+              </p>
+            </div>
+            <div class="stats-row">
+              <div class="stat-card">
+                <span class="stat-number">8</span>
+                <span class="stat-label">หมวดหมู่</span>
+              </div>
+              <div class="stat-card">
+                <span class="stat-number">40+</span>
+                <span class="stat-label">ตัวอย่าง</span>
+              </div>
+              <div class="stat-card">
+                <span class="stat-number">100%</span>
+                <span class="stat-label">Interactive</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="features-grid">
+            <div class="feature-card" data-goto="crud">
+              <span class="feature-icon">📝</span>
+              <h3>CRUD Operations</h3>
+              <p>Insert, Find, Update, Delete — ครบทุก method พร้อมตัวอย่าง</p>
+            </div>
+            <div class="feature-card" data-goto="query">
+              <span class="feature-icon">🔍</span>
+              <h3>Query Operators</h3>
+              <p>Comparison, Logical, Array, Evaluation operators</p>
+            </div>
+            <div class="feature-card" data-goto="aggregation">
+              <span class="feature-icon">📊</span>
+              <h3>Aggregation</h3>
+              <p>Pipeline stages: $match, $group, $lookup, $unwind</p>
+            </div>
+            <div class="feature-card" data-goto="indexing">
+              <span class="feature-icon">⚡</span>
+              <h3>Indexing</h3>
+              <p>Single, Compound, Text, TTL, Geospatial indexes</p>
+            </div>
+            <div class="feature-card" data-goto="modeling">
+              <span class="feature-icon">🏗️</span>
+              <h3>Data Modeling</h3>
+              <p>Embedding vs Referencing, Schema patterns</p>
+            </div>
+            <div class="feature-card" data-goto="transactions">
+              <span class="feature-icon">🔄</span>
+              <h3>Transactions</h3>
+              <p>ACID, Multi-document transactions, Sessions</p>
+            </div>
+            <div class="feature-card" data-goto="mongoose">
+              <span class="feature-icon">🦦</span>
+              <h3>Mongoose ODM</h3>
+              <p>Schema, Model, Middleware, Validation</p>
+            </div>
+          </div>
+        </section>
+
+        <!-- ===== CRUD ===== -->
+        <section class="section" id="section-crud">
+          <h2 class="section-title">📝 CRUD Operations</h2>
+          <p class="section-desc">การสร้าง อ่าน อัปเดต และลบข้อมูลใน MongoDB</p>
+
+          <div class="example-tabs">
+            <button class="tab active" data-tab="crud-insert">Insert</button>
+            <button class="tab" data-tab="crud-find">Find</button>
+            <button class="tab" data-tab="crud-update">Update</button>
+            <button class="tab" data-tab="crud-delete">Delete</button>
+            <button class="tab" data-tab="crud-bulk">Bulk</button>
+          </div>
+
+          <div class="tab-content active" id="tab-crud-insert">
+            <div class="example-card">
+              <div class="example-header">
+                <h3>insertOne() — แทรกเอกสารเดียว</h3>
+                <button class="run-btn" data-example="insertOne">▶ Run</button>
+              </div>
+              <div class="code-block">
+                <pre><code>db.users.insertOne({
+  name: "สมชาย",
+  age: 25,
+  email: "somchai@email.com",
+  hobbies: ["coding", "gaming"],
+  address: {
+    city: "กรุงเทพฯ",
+    zipcode: "10110"
+  },
+  createdAt: new Date()
+})</code></pre>
+              </div>
+              <div class="result-block hidden" id="result-insertOne">
+                <div class="result-header">📋 Result</div>
+                <pre class="result-output"></pre>
+              </div>
+            </div>
+
+            <div class="example-card">
+              <div class="example-header">
+                <h3>insertMany() — แทรกหลายเอกสาร</h3>
+                <button class="run-btn" data-example="insertMany">▶ Run</button>
+              </div>
+              <div class="code-block">
+                <pre><code>db.users.insertMany([
+  { name: "สมหญิง", age: 30, email: "somying@email.com" },
+  { name: "สมศักดิ์", age: 28, email: "somsak@email.com" },
+  { name: "สมศรี", age: 22, email: "somsri@email.com" }
+])</code></pre>
+              </div>
+              <div class="result-block hidden" id="result-insertMany">
+                <div class="result-header">📋 Result</div>
+                <pre class="result-output"></pre>
+              </div>
+            </div>
+          </div>
+
+          <div class="tab-content" id="tab-crud-find">
+            <div class="example-card">
+              <div class="example-header">
+                <h3>find() — ค้นหาข้อมูล</h3>
+                <button class="run-btn" data-example="find">▶ Run</button>
+              </div>
+              <div class="code-block">
+                <pre><code>// ค้นหาทั้งหมด
+db.users.find()
+
+// ค้นหาแบบมีเงื่อนไข
+db.users.find({ age: { $gte: 25 } })
+
+// Projection — เลือกเฉพาะ field ที่ต้องการ
+db.users.find(
+  { age: { $gte: 25 } },
+  { name: 1, age: 1, _id: 0 }
+)</code></pre>
+              </div>
+              <div class="result-block hidden" id="result-find">
+                <div class="result-header">📋 Result</div>
+                <pre class="result-output"></pre>
+              </div>
+            </div>
+
+            <div class="example-card">
+              <div class="example-header">
+                <h3>Sort, Limit, Skip — เรียง จำกัด ข้าม</h3>
+                <button class="run-btn" data-example="findAdvanced">
+                  ▶ Run
+                </button>
+              </div>
+              <div class="code-block">
+                <pre><code>// เรียงตามอายุ จากมากไปน้อย จำกัด 2 รายการ
+db.users.find()
+  .sort({ age: -1 })
+  .limit(2)
+
+// Pagination: หน้าที่ 2 (skip 2, limit 2)
+db.users.find()
+  .skip(2)
+  .limit(2)</code></pre>
+              </div>
+              <div class="result-block hidden" id="result-findAdvanced">
+                <div class="result-header">📋 Result</div>
+                <pre class="result-output"></pre>
+              </div>
+            </div>
+          </div>
+
+          <div class="tab-content" id="tab-crud-update">
+            <div class="example-card">
+              <div class="example-header">
+                <h3>updateOne() — อัปเดตเอกสารเดียว</h3>
+                <button class="run-btn" data-example="updateOne">▶ Run</button>
+              </div>
+              <div class="code-block">
+                <pre><code>// $set — กำหนดค่า field
+db.users.updateOne(
+  { name: "สมชาย" },
+  {
+    $set: { age: 26, status: "active" },
+    $push: { hobbies: "reading" }
+  }
+)
+
+// $inc — เพิ่มค่าตัวเลข
+db.users.updateOne(
+  { name: "สมชาย" },
+  { $inc: { age: 1 } }
+)
+
+// Upsert — ถ้าไม่มีก็สร้างใหม่
+db.users.updateOne(
+  { email: "new@email.com" },
+  { $set: { name: "คนใหม่", age: 20 } },
+  { upsert: true }
+)</code></pre>
+              </div>
+              <div class="result-block hidden" id="result-updateOne">
+                <div class="result-header">📋 Result</div>
+                <pre class="result-output"></pre>
+              </div>
+            </div>
+          </div>
+
+          <div class="tab-content" id="tab-crud-delete">
+            <div class="example-card">
+              <div class="example-header">
+                <h3>deleteOne() / deleteMany()</h3>
+                <button class="run-btn" data-example="delete">▶ Run</button>
+              </div>
+              <div class="code-block">
+                <pre><code>// ลบเอกสารเดียว
+db.users.deleteOne({ name: "สมชาย" })
+
+// ลบหลายเอกสาร
+db.users.deleteMany({ age: { $lt: 18 } })
+
+// findOneAndDelete — ลบและคืนเอกสาร
+db.users.findOneAndDelete(
+  { status: "inactive" }
+)</code></pre>
+              </div>
+              <div class="result-block hidden" id="result-delete">
+                <div class="result-header">📋 Result</div>
+                <pre class="result-output"></pre>
+              </div>
+            </div>
+          </div>
+
+          <div class="tab-content" id="tab-crud-bulk">
+            <div class="example-card">
+              <div class="example-header">
+                <h3>bulkWrite() — ทำหลาย operations พร้อมกัน</h3>
+                <button class="run-btn" data-example="bulk">▶ Run</button>
+              </div>
+              <div class="code-block">
+                <pre><code>db.users.bulkWrite([
+  {
+    insertOne: {
+      document: { name: "User A", age: 20 }
+    }
+  },
+  {
+    updateOne: {
+      filter: { name: "สมชาย" },
+      update: { $set: { status: "premium" } }
+    }
+  },
+  {
+    deleteOne: {
+      filter: { status: "inactive" }
+    }
+  }
+], { ordered: false })</code></pre>
+              </div>
+              <div class="result-block hidden" id="result-bulk">
+                <div class="result-header">📋 Result</div>
+                <pre class="result-output"></pre>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ===== QUERY OPERATORS ===== -->
+        <section class="section" id="section-query">
+          <h2 class="section-title">🔍 Query Operators</h2>
+          <p class="section-desc">Operators สำหรับค้นหาข้อมูลแบบซับซ้อน</p>
+
+          <div class="example-tabs">
+            <button class="tab active" data-tab="query-comparison">
+              Comparison
+            </button>
+            <button class="tab" data-tab="query-logical">Logical</button>
+            <button class="tab" data-tab="query-array">Array</button>
+            <button class="tab" data-tab="query-eval">Evaluation</button>
+          </div>
+
+          <div class="tab-content active" id="tab-query-comparison">
+            <div class="example-card">
+              <div class="example-header">
+                <h3>Comparison Operators</h3>
+                <button class="run-btn" data-example="comparison">▶ Run</button>
+              </div>
+              <div class="operator-grid">
+                <div class="operator-item">
+                  <code>$eq</code><span>เท่ากับ</span>
+                </div>
+                <div class="operator-item">
+                  <code>$ne</code><span>ไม่เท่ากับ</span>
+                </div>
+                <div class="operator-item">
+                  <code>$gt</code><span>มากกว่า</span>
+                </div>
+                <div class="operator-item"><code>$gte</code><span>≥</span></div>
+                <div class="operator-item">
+                  <code>$lt</code><span>น้อยกว่า</span>
+                </div>
+                <div class="operator-item"><code>$lte</code><span>≤</span></div>
+                <div class="operator-item">
+                  <code>$in</code><span>อยู่ใน array</span>
+                </div>
+                <div class="operator-item">
+                  <code>$nin</code><span>ไม่อยู่ใน array</span>
+                </div>
+              </div>
+              <div class="code-block">
+                <pre><code>// หาคนอายุ 18-30
+db.users.find({
+  age: { $gte: 18, $lte: 30 }
+})
+
+// หาคนที่อยู่ในเมืองที่กำหนด
+db.users.find({
+  city: { $in: ["กรุงเทพฯ", "เชียงใหม่", "ภูเก็ต"] }
+})</code></pre>
+              </div>
+              <div class="result-block hidden" id="result-comparison">
+                <div class="result-header">📋 Result</div>
+                <pre class="result-output"></pre>
+              </div>
+            </div>
+          </div>
+
+          <div class="tab-content" id="tab-query-logical">
+            <div class="example-card">
+              <div class="example-header">
+                <h3>Logical Operators</h3>
+                <button class="run-btn" data-example="logical">▶ Run</button>
+              </div>
+              <div class="operator-grid">
+                <div class="operator-item">
+                  <code>$and</code><span>ตรงทุกเงื่อนไข</span>
+                </div>
+                <div class="operator-item">
+                  <code>$or</code><span>ตรงอย่างน้อยหนึ่ง</span>
+                </div>
+                <div class="operator-item">
+                  <code>$not</code><span>ไม่ตรง</span>
+                </div>
+                <div class="operator-item">
+                  <code>$nor</code><span>ไม่ตรงทุกข้อ</span>
+                </div>
+              </div>
+              <div class="code-block">
+                <pre><code>// $and — active และอายุมากกว่า 18
+db.users.find({
+  $and: [
+    { status: "active" },
+    { age: { $gte: 18 } }
+  ]
+})
+
+// $or — อายุน้อยกว่า 18 หรือมากกว่า 65
+db.users.find({
+  $or: [
+    { age: { $lt: 18 } },
+    { age: { $gt: 65 } }
+  ]
+})</code></pre>
+              </div>
+              <div class="result-block hidden" id="result-logical">
+                <div class="result-header">📋 Result</div>
+                <pre class="result-output"></pre>
+              </div>
+            </div>
+          </div>
+
+          <div class="tab-content" id="tab-query-array">
+            <div class="example-card">
+              <div class="example-header">
+                <h3>Array Operators</h3>
+                <button class="run-btn" data-example="arrayOps">▶ Run</button>
+              </div>
+              <div class="operator-grid">
+                <div class="operator-item">
+                  <code>$elemMatch</code><span>ตรงใน element</span>
+                </div>
+                <div class="operator-item">
+                  <code>$all</code><span>มีทุก element</span>
+                </div>
+                <div class="operator-item">
+                  <code>$size</code><span>ขนาด array</span>
+                </div>
+              </div>
+              <div class="code-block">
+                <pre><code>// $elemMatch — หาคะแนน 80-90 ในอาร์เรย์
+db.students.find({
+  scores: { $elemMatch: { $gte: 80, $lt: 90 } }
+})
+
+// $all — ต้องมี tag ทั้ง "sale" และ "new"
+db.products.find({
+  tags: { $all: ["sale", "new"] }
+})
+
+// $size — หาคนที่มี hobby 3 อย่าง
+db.users.find({ hobbies: { $size: 3 } })</code></pre>
+              </div>
+              <div class="result-block hidden" id="result-arrayOps">
+                <div class="result-header">📋 Result</div>
+                <pre class="result-output"></pre>
+              </div>
+            </div>
+          </div>
+
+          <div class="tab-content" id="tab-query-eval">
+            <div class="example-card">
+              <div class="example-header">
+                <h3>Evaluation Operators</h3>
+                <button class="run-btn" data-example="evaluation">▶ Run</button>
+              </div>
+              <div class="code-block">
+                <pre><code>// $regex — ค้นหาด้วย pattern
+db.users.find({
+  name: { $regex: /^สม/, $options: "i" }
+})
+
+// $expr — เปรียบเทียบ field กับ field
+db.orders.find({
+  $expr: { $gt: ["$total", "$budget"] }
+})
+
+// $text — Full-text search
+db.articles.createIndex({ content: "text" })
+db.articles.find({
+  $text: { $search: "mongodb aggregation" }
+})</code></pre>
+              </div>
+              <div class="result-block hidden" id="result-evaluation">
+                <div class="result-header">📋 Result</div>
+                <pre class="result-output"></pre>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ===== AGGREGATION ===== -->
+        <section class="section" id="section-aggregation">
+          <h2 class="section-title">📊 Aggregation Framework</h2>
+          <p class="section-desc">Pipeline สำหรับประมวลผลและวิเคราะห์ข้อมูล</p>
+
+          <div class="pipeline-visualizer">
+            <h3>Pipeline Flow</h3>
+            <div class="pipeline-flow">
+              <div class="pipeline-stage" data-stage="$match">
+                <span class="stage-icon">🔍</span>
+                <span class="stage-name">$match</span>
+                <span class="stage-desc">กรองข้อมูล</span>
+              </div>
+              <div class="pipeline-arrow">→</div>
+              <div class="pipeline-stage" data-stage="$group">
+                <span class="stage-icon">📦</span>
+                <span class="stage-name">$group</span>
+                <span class="stage-desc">จัดกลุ่ม</span>
+              </div>
+              <div class="pipeline-arrow">→</div>
+              <div class="pipeline-stage" data-stage="$sort">
+                <span class="stage-icon">↕️</span>
+                <span class="stage-name">$sort</span>
+                <span class="stage-desc">เรียงลำดับ</span>
+              </div>
+              <div class="pipeline-arrow">→</div>
+              <div class="pipeline-stage" data-stage="$project">
+                <span class="stage-icon">📋</span>
+                <span class="stage-name">$project</span>
+                <span class="stage-desc">เลือก field</span>
+              </div>
+              <div class="pipeline-arrow">→</div>
+              <div class="pipeline-stage result-stage">
+                <span class="stage-icon">✅</span>
+                <span class="stage-name">Result</span>
+                <span class="stage-desc">ผลลัพธ์</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="example-card">
+            <div class="example-header">
+              <h3>รายงานยอดขายตามหมวด</h3>
+              <button class="run-btn" data-example="aggSales">▶ Run</button>
+            </div>
+            <div class="code-block">
+              <pre><code>db.orders.aggregate([
+  // Stage 1: กรองเฉพาะออเดอร์สำเร็จ
+  { $match: { status: "completed" } },
+
+  // Stage 2: จัดกลุ่มตาม category
+  { $group: {
+    _id: "$category",
+    totalRevenue: { $sum: "$amount" },
+    orderCount: { $sum: 1 },
+    avgOrder: { $avg: "$amount" }
+  }},
+
+  // Stage 3: เรียงตามยอดมากสุด
+  { $sort: { totalRevenue: -1 } },
+
+  // Stage 4: จัดรูปแบบผลลัพธ์
+  { $project: {
+    _id: 0,
+    category: "$_id",
+    totalRevenue: { $round: ["$totalRevenue", 2] },
+    orderCount: 1,
+    avgOrder: { $round: ["$avgOrder", 2] }
+  }}
+])</code></pre>
+            </div>
+            <div class="result-block hidden" id="result-aggSales">
+              <div class="result-header">📋 Result</div>
+              <pre class="result-output"></pre>
+            </div>
+          </div>
+
+          <div class="example-card">
+            <div class="example-header">
+              <h3>$lookup — JOIN กับ collection อื่น</h3>
+              <button class="run-btn" data-example="aggLookup">▶ Run</button>
+            </div>
+            <div class="code-block">
+              <pre><code>db.orders.aggregate([
+  // JOIN orders กับ users
+  { $lookup: {
+    from: "users",
+    localField: "userId",
+    foreignField: "_id",
+    as: "customer"
+  }},
+
+  // แตก array customer
+  { $unwind: "$customer" },
+
+  // เลือก field ที่ต้องการ
+  { $project: {
+    orderId: "$_id",
+    product: 1,
+    total: 1,
+    customerName: "$customer.name",
+    customerEmail: "$customer.email"
+  }}
+])</code></pre>
+            </div>
+            <div class="result-block hidden" id="result-aggLookup">
+              <div class="result-header">📋 Result</div>
+              <pre class="result-output"></pre>
+            </div>
+          </div>
+
+          <div class="example-card">
+            <div class="example-header">
+              <h3>$facet — Pipeline หลายสายพร้อมกัน</h3>
+              <button class="run-btn" data-example="aggFacet">▶ Run</button>
+            </div>
+            <div class="code-block">
+              <pre><code>db.products.aggregate([
+  { $facet: {
+    // สาย 1: สถิติราคา
+    priceStats: [
+      { $group: {
+        _id: null,
+        avgPrice: { $avg: "$price" },
+        maxPrice: { $max: "$price" },
+        minPrice: { $min: "$price" }
+      }}
+    ],
+    // สาย 2: นับตามหมวด
+    categoryBreakdown: [
+      { $group: {
+        _id: "$category",
+        count: { $sum: 1 }
+      }},
+      { $sort: { count: -1 } }
+    ],
+    // สาย 3: Top 3 สินค้าแพงสุด
+    topExpensive: [
+      { $sort: { price: -1 } },
+      { $limit: 3 },
+      { $project: { name: 1, price: 1 } }
+    ]
+  }}
+])</code></pre>
+            </div>
+            <div class="result-block hidden" id="result-aggFacet">
+              <div class="result-header">📋 Result</div>
+              <pre class="result-output"></pre>
+            </div>
+          </div>
+        </section>
+
+        <!-- ===== INDEXING ===== -->
+        <section class="section" id="section-indexing">
+          <h2 class="section-title">⚡ Indexing</h2>
+          <p class="section-desc">เพิ่มประสิทธิภาพ query ด้วย Index</p>
+
+          <div class="comparison-card">
+            <h3>❌ Without Index vs ✅ With Index</h3>
+            <div class="comparison-grid">
+              <div class="comparison-side bad">
+                <h4>COLLSCAN (No Index)</h4>
+                <div class="scan-visual">
+                  <div class="doc scanned">📄</div>
+                  <div class="doc scanned">📄</div>
+                  <div class="doc scanned">📄</div>
+                  <div class="doc scanned">📄</div>
+                  <div class="doc scanned found">📄 ✓</div>
+                  <div class="doc scanned">📄</div>
+                  <div class="doc scanned">📄</div>
+                  <div class="doc scanned">📄</div>
+                </div>
+                <p class="scan-info">
+                  Scan ทุก document → <span class="bad-text">ช้า O(n)</span>
+                </p>
+              </div>
+              <div class="comparison-side good">
+                <h4>IXSCAN (With Index)</h4>
+                <div class="scan-visual">
+                  <div class="doc">📄</div>
+                  <div class="doc">📄</div>
+                  <div class="doc">📄</div>
+                  <div class="doc">📄</div>
+                  <div class="doc found">📄 ✓</div>
+                  <div class="doc">📄</div>
+                  <div class="doc">📄</div>
+                  <div class="doc">📄</div>
+                </div>
+                <p class="scan-info">
+                  ไปที่ target ทันที →
+                  <span class="good-text">เร็ว O(log n)</span>
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <div class="example-card">
+            <div class="example-header">
+              <h3>ประเภทของ Index</h3>
+              <button class="run-btn" data-example="indexTypes">▶ Run</button>
+            </div>
+            <div class="code-block">
+              <pre><code>// Single Field
+db.users.createIndex({ email: 1 })
+
+// Compound (หลาย field)
+db.orders.createIndex({ userId: 1, createdAt: -1 })
+
+// Unique (ห้ามซ้ำ)
+db.users.createIndex({ email: 1 }, { unique: true })
+
+// TTL (ลบอัตโนมัติ)
+db.sessions.createIndex(
+  { createdAt: 1 },
+  { expireAfterSeconds: 3600 }
+)
+
+// Text (Full-text search)
+db.articles.createIndex({ title: "text", content: "text" })
+
+// Partial (index เฉพาะเอกสารที่ตรงเงื่อนไข)
+db.users.createIndex(
+  { email: 1 },
+  { partialFilterExpression: { status: "active" } }
+)</code></pre>
+            </div>
+            <div class="result-block hidden" id="result-indexTypes">
+              <div class="result-header">📋 Result</div>
+              <pre class="result-output"></pre>
+            </div>
+          </div>
+
+          <div class="example-card">
+            <div class="example-header">
+              <h3>explain() — วิเคราะห์ query performance</h3>
+              <button class="run-btn" data-example="explain">▶ Run</button>
+            </div>
+            <div class="code-block">
+              <pre><code>db.users.find({ email: "test@email.com" })
+  .explain("executionStats")
+
+// ค่าสำคัญที่ต้องดู:
+// ✅ winningPlan.stage: "IXSCAN" = ดี
+// ❌ winningPlan.stage: "COLLSCAN" = ไม่ดี
+// ✅ totalDocsExamined ≈ nReturned
+// ✅ executionTimeMillis ต่ำ</code></pre>
+            </div>
+            <div class="result-block hidden" id="result-explain">
+              <div class="result-header">📋 Result</div>
+              <pre class="result-output"></pre>
+            </div>
+          </div>
+        </section>
+
+        <!-- ===== DATA MODELING ===== -->
+        <section class="section" id="section-modeling">
+          <h2 class="section-title">🏗️ Data Modeling</h2>
+          <p class="section-desc">การออกแบบโครงสร้างข้อมูลใน MongoDB</p>
+
+          <div class="model-comparison">
+            <div class="model-card embed-card">
+              <div class="model-badge embed">Embedding</div>
+              <h3>ฝังข้อมูลใน Document เดียว</h3>
+              <div class="code-block">
+                <pre><code>// ✅ เหมาะกับ 1:1, 1:Few
+{
+  _id: ObjectId("..."),
+  name: "สมชาย",
+  address: {
+    street: "ถนนสุขุมวิท",
+    city: "กรุงเทพฯ"
+  },
+  orders: [
+    { product: "A", qty: 2 },
+    { product: "B", qty: 1 }
+  ]
+}</code></pre>
+              </div>
+              <div class="pros-cons">
+                <div class="pros">
+                  <h4>✅ ข้อดี</h4>
+                  <ul>
+                    <li>อ่านเร็ว (1 query)</li>
+                    <li>Atomic update</li>
+                    <li>ไม่ต้อง JOIN</li>
+                  </ul>
+                </div>
+                <div class="cons">
+                  <h4>❌ ข้อเสีย</h4>
+                  <ul>
+                    <li>Document size limit 16MB</li>
+                    <li>ข้อมูลซ้ำซ้อนได้</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+
+            <div class="model-card ref-card">
+              <div class="model-badge ref">Referencing</div>
+              <h3>อ้างอิงด้วย ID</h3>
+              <div class="code-block">
+                <pre><code>// ✅ เหมาะกับ 1:Many, N:N
+
+// users collection
+{ _id: ObjectId("u1"), name: "สมชาย" }
+
+// orders collection
+{
+  _id: ObjectId("o1"),
+  userId: ObjectId("u1"), // ref
+  product: "A",
+  total: 500
+}</code></pre>
+              </div>
+              <div class="pros-cons">
+                <div class="pros">
+                  <h4>✅ ข้อดี</h4>
+                  <ul>
+                    <li>ไม่ซ้ำซ้อน</li>
+                    <li>Document ไม่บวม</li>
+                    <li>ขยายได้ง่าย</li>
+                  </ul>
+                </div>
+                <div class="cons">
+                  <h4>❌ ข้อเสีย</h4>
+                  <ul>
+                    <li>ต้อง query หลายรอบ</li>
+                    <li>ต้องใช้ $lookup</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="decision-table">
+            <h3>🤔 เลือกใช้เมื่อไหร่?</h3>
+            <table>
+              <thead>
+                <tr>
+                  <th>เกณฑ์</th>
+                  <th>Embedding</th>
+                  <th>Referencing</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>ความสัมพันธ์</td>
+                  <td>1:1, 1:Few</td>
+                  <td>1:Many, N:N</td>
+                </tr>
+                <tr>
+                  <td>อ่านบ่อยพร้อมกัน?</td>
+                  <td>✅ ใช่</td>
+                  <td>❌ แยกกัน</td>
+                </tr>
+                <tr>
+                  <td>ข้อมูลเปลี่ยนบ่อย?</td>
+                  <td>❌ ไม่ค่อย</td>
+                  <td>✅ บ่อย</td>
+                </tr>
+                <tr>
+                  <td>ขนาดข้อมูล</td>
+                  <td>เล็ก (&lt;16MB)</td>
+                  <td>ใหญ่/โตได้</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <!-- ===== TRANSACTIONS ===== -->
+        <section class="section" id="section-transactions">
+          <h2 class="section-title">🔄 Transactions</h2>
+          <p class="section-desc">ACID Transactions ใน MongoDB</p>
+
+          <div class="info-banner">
+            <span class="info-icon">💡</span>
+            <p>
+              MongoDB รับประกัน <strong>Atomicity</strong> ในระดับ single
+              document เสมอ — ไม่ต้องใช้ transaction สำหรับการอัปเดต document
+              เดียว
+            </p>
+          </div>
+
+          <div class="example-card">
+            <div class="example-header">
+              <h3>Single Document Atomicity</h3>
+              <button class="run-btn" data-example="singleAtomic">▶ Run</button>
+            </div>
+            <div class="code-block">
+              <pre><code>// ทั้ง $inc และ $push จะสำเร็จหรือล้มเหลวพร้อมกัน
+db.accounts.updateOne(
+  { _id: "account1" },
+  {
+    $inc: { balance: -100 },
+    $push: {
+      transactions: {
+        type: "withdraw",
+        amount: 100,
+        date: new Date()
+      }
+    }
+  }
+)</code></pre>
+            </div>
+            <div class="result-block hidden" id="result-singleAtomic">
+              <div class="result-header">📋 Result</div>
+              <pre class="result-output"></pre>
+            </div>
+          </div>
+
+          <div class="example-card">
+            <div class="example-header">
+              <h3>Multi-Document Transaction (โอนเงิน)</h3>
+              <button class="run-btn" data-example="multiTx">▶ Run</button>
+            </div>
+            <div class="code-block">
+              <pre><code>const session = db.getMongo().startSession()
+session.startTransaction()
+
+try {
+  const accounts = session.getDatabase("bank").accounts
+
+  // หักเงินจากบัญชี A
+  accounts.updateOne(
+    { _id: "accountA" },
+    { $inc: { balance: -500 } },
+    { session }
+  )
+
+  // เพิ่มเงินให้บัญชี B
+  accounts.updateOne(
+    { _id: "accountB" },
+    { $inc: { balance: 500 } },
+    { session }
+  )
+
+  // ✅ ทั้ง 2 operations สำเร็จ → commit
+  session.commitTransaction()
+} catch (error) {
+  // ❌ เกิดข้อผิดพลาด → rollback ทั้งหมด
+  session.abortTransaction()
+} finally {
+  session.endSession()
+}</code></pre>
+            </div>
+            <div class="result-block hidden" id="result-multiTx">
+              <div class="result-header">📋 Result</div>
+              <pre class="result-output"></pre>
+            </div>
+          </div>
+        </section>
+
+        <!-- ===== MONGOOSE ===== -->
+        <section class="section" id="section-mongoose">
+          <h2 class="section-title">🦦 Mongoose ODM</h2>
+          <p class="section-desc">Object Document Mapper สำหรับ Node.js</p>
+
+          <div class="example-card">
+            <div class="example-header">
+              <h3>Schema & Model</h3>
+              <button class="run-btn" data-example="mongooseSchema">
+                ▶ Run
+              </button>
+            </div>
+            <div class="code-block">
+              <pre><code>import mongoose from 'mongoose'
+
+// เชื่อมต่อ
+await mongoose.connect('mongodb://localhost:27017/myApp')
+
+// สร้าง Schema
+const userSchema = new mongoose.Schema({
+  name:  { type: String, required: true, trim: true },
+  email: { type: String, required: true, unique: true,
+           lowercase: true },
+  age:   { type: Number, min: 0, max: 150 },
+  role:  { type: String, enum: ['user','admin'],
+           default: 'user' },
+  tags:  [String],
+  profile: {
+    avatar: String,
+    bio:    { type: String, maxlength: 500 }
+  }
+}, {
+  timestamps: true  // adds createdAt, updatedAt
+})
+
+// สร้าง Model
+const User = mongoose.model('User', userSchema)</code></pre>
+            </div>
+            <div class="result-block hidden" id="result-mongooseSchema">
+              <div class="result-header">📋 Result</div>
+              <pre class="result-output"></pre>
+            </div>
+          </div>
+
+          <div class="example-card">
+            <div class="example-header">
+              <h3>CRUD ด้วย Mongoose</h3>
+              <button class="run-btn" data-example="mongooseCrud">▶ Run</button>
+            </div>
+            <div class="code-block">
+              <pre><code>// Create
+const user = await User.create({
+  name: 'สมชาย',
+  email: 'somchai@email.com',
+  age: 25
+})
+
+// Read
+const found = await User.findOne({ email: 'somchai@email.com' })
+const all   = await User.find({ age: { $gte: 18 } })
+                         .sort({ name: 1 })
+                         .limit(10)
+                         .select('name email')
+
+// Update
+await User.findByIdAndUpdate(
+  user._id,
+  { $set: { age: 26 } },
+  { new: true, runValidators: true }
+)
+
+// Delete
+await User.findByIdAndDelete(user._id)</code></pre>
+            </div>
+            <div class="result-block hidden" id="result-mongooseCrud">
+              <div class="result-header">📋 Result</div>
+              <pre class="result-output"></pre>
+            </div>
+          </div>
+
+          <div class="example-card">
+            <div class="example-header">
+              <h3>Middleware & Virtuals</h3>
+              <button class="run-btn" data-example="mongooseMiddleware">
+                ▶ Run
+              </button>
+            </div>
+            <div class="code-block">
+              <pre><code>// Pre-save middleware
+userSchema.pre('save', async function(next) {
+  if (this.isModified('password')) {
+    this.password = await bcrypt.hash(this.password, 12)
+  }
+  next()
+})
+
+// Virtual field (ไม่ได้เก็บใน DB)
+userSchema.virtual('fullName').get(function() {
+  return `${this.firstName} ${this.lastName}`
+})
+
+// Static method
+userSchema.statics.findByEmail = function(email) {
+  return this.findOne({ email: email.toLowerCase() })
+}
+
+// Instance method
+userSchema.methods.isAdmin = function() {
+  return this.role === 'admin'
+}</code></pre>
+            </div>
+            <div class="result-block hidden" id="result-mongooseMiddleware">
+              <div class="result-header">📋 Result</div>
+              <pre class="result-output"></pre>
+            </div>
+          </div>
+        </section>
+      </div>
+    </main>
+
+    <script src="app.js"></script>
+  </body>
+</html>
