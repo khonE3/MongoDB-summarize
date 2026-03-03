@@ -66,6 +66,10 @@
           <span class="nav-icon">🏠</span>
           <span class="nav-label">Overview</span>
         </li>
+        <li class="nav-item" data-section="basics">
+          <span class="nav-icon">📚</span>
+          <span class="nav-label">Basic Concepts</span>
+        </li>
         <li class="nav-item" data-section="crud">
           <span class="nav-icon">📝</span>
           <span class="nav-label">CRUD Operations</span>
@@ -89,6 +93,10 @@
         <li class="nav-item" data-section="transactions">
           <span class="nav-icon">🔄</span>
           <span class="nav-label">Transactions</span>
+        </li>
+        <li class="nav-item" data-section="security">
+          <span class="nav-icon">🔐</span>
+          <span class="nav-label">Security & Users</span>
         </li>
         <li class="nav-item" data-section="mongoose">
           <span class="nav-icon">🦦</span>
@@ -144,7 +152,7 @@
             </div>
             <div class="stats-row">
               <div class="stat-card">
-                <span class="stat-number">8</span>
+                <span class="stat-number">10</span>
                 <span class="stat-label">หมวดหมู่</span>
               </div>
               <div class="stat-card">
@@ -159,6 +167,11 @@
           </div>
 
           <div class="features-grid">
+            <div class="feature-card" data-goto="basics">
+              <span class="feature-icon">📚</span>
+              <h3>Basic Concepts</h3>
+              <p>Database, Collection, Document, BSON, Data Types</p>
+            </div>
             <div class="feature-card" data-goto="crud">
               <span class="feature-icon">📝</span>
               <h3>CRUD Operations</h3>
@@ -188,6 +201,11 @@
               <span class="feature-icon">🔄</span>
               <h3>Transactions</h3>
               <p>ACID, Multi-document transactions, Sessions</p>
+            </div>
+            <div class="feature-card" data-goto="security">
+              <span class="feature-icon">🔐</span>
+              <h3>Security & Users</h3>
+              <p>Authentication, Authorization, Roles, User Management</p>
             </div>
             <div class="feature-card" data-goto="mongoose">
               <span class="feature-icon">🦦</span>
@@ -1139,6 +1157,236 @@ userSchema.methods.isAdmin = function() {
             <div class="result-block hidden" id="result-mongooseMiddleware">
               <div class="result-header">📋 Result</div>
               <pre class="result-output"></pre>
+            </div>
+          </div>
+        </section>
+
+        <!-- ===== BASIC CONCEPTS ===== -->
+        <section class="section" id="section-basics">
+          <h2 class="section-title">📚 Basic Concepts</h2>
+          <p class="section-desc">โครงสร้างพื้นฐานของ MongoDB — Database, Collection, Document</p>
+
+          <div class="info-banner">
+            <span class="info-icon">🏗️</span>
+            <p>โครงสร้าง MongoDB: <strong>Server → Database → Collection → Document → Field</strong> (เทียบกับ SQL: Server → Database → Table → Row → Column)</p>
+          </div>
+
+          <div class="example-card">
+            <div class="example-header">
+              <h3>คำสั่งจัดการ Database & Collection</h3>
+              <button class="run-btn" data-example="basicCommands">▶ Run</button>
+            </div>
+            <div class="code-block">
+              <pre><code>// แสดง databases ทั้งหมด
+show dbs
+
+// สร้าง/เลือกใช้ database
+use myDatabase
+
+// แสดง collections ทั้งหมด
+show collections
+
+// สร้าง collection
+db.createCollection("users")
+
+// ดูสถิติ database
+db.stats()
+
+// ลบ collection
+db.users.drop()
+
+// ลบ database
+db.dropDatabase()</code></pre>
+            </div>
+            <div class="result-block hidden" id="result-basicCommands">
+              <div class="result-header">📋 Result</div>
+              <pre class="result-output"></pre>
+            </div>
+          </div>
+
+          <div class="example-card">
+            <div class="example-header">
+              <h3>Document Structure — โครงสร้างเอกสาร</h3>
+              <button class="run-btn" data-example="docStructure">▶ Run</button>
+            </div>
+            <div class="code-block">
+              <pre><code>// Document ใน MongoDB เก็บเป็น BSON (Binary JSON)
+{
+  "_id": ObjectId("507f1f77bcf86cd799439011"),
+  "name": "สมชาย",              // String
+  "age": 25,                     // Number (Int32)
+  "salary": NumberDecimal("55000.50"), // Decimal128
+  "isActive": true,              // Boolean
+  "hobbies": ["coding", "gaming"], // Array
+  "address": {                   // Embedded Document
+    "city": "กรุงเทพฯ",
+    "zipcode": "10110"
+  },
+  "joinDate": ISODate("2024-01-15"), // Date
+  "avatar": null                 // Null
+}</code></pre>
+            </div>
+            <div class="result-block hidden" id="result-docStructure">
+              <div class="result-header">📋 Result</div>
+              <pre class="result-output"></pre>
+            </div>
+          </div>
+
+          <div class="decision-table">
+            <h3>📊 BSON Data Types</h3>
+            <table>
+              <thead>
+                <tr><th>Type</th><th>ตัวอย่าง</th><th>คำอธิบาย</th></tr>
+              </thead>
+              <tbody>
+                <tr><td><code>String</code></td><td>"สวัสดี"</td><td>ข้อความ UTF-8</td></tr>
+                <tr><td><code>Int32</code></td><td>42</td><td>จำนวนเต็ม 32-bit</td></tr>
+                <tr><td><code>Int64</code></td><td>NumberLong("999")</td><td>จำนวนเต็ม 64-bit</td></tr>
+                <tr><td><code>Double</code></td><td>3.14</td><td>ทศนิยม 64-bit</td></tr>
+                <tr><td><code>Decimal128</code></td><td>NumberDecimal("19.99")</td><td>ทศนิยมแม่นยำสูง</td></tr>
+                <tr><td><code>Boolean</code></td><td>true / false</td><td>ค่าจริง/เท็จ</td></tr>
+                <tr><td><code>ObjectId</code></td><td>ObjectId("507f...")</td><td>ID อัตโนมัติ 12 bytes</td></tr>
+                <tr><td><code>Date</code></td><td>ISODate("2024-01-01")</td><td>วันที่/เวลา</td></tr>
+                <tr><td><code>Array</code></td><td>[1, 2, 3]</td><td>อาร์เรย์</td></tr>
+                <tr><td><code>Object</code></td><td>{ key: "value" }</td><td>เอกสารซ้อน</td></tr>
+                <tr><td><code>Null</code></td><td>null</td><td>ค่าว่าง</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <!-- ===== SECURITY & USERS ===== -->
+        <section class="section" id="section-security">
+          <h2 class="section-title">🔐 Security & User Management</h2>
+          <p class="section-desc">Authentication, Authorization, Roles และการจัดการ Users</p>
+
+          <div class="example-tabs">
+            <button class="tab active" data-tab="sec-create">สร้าง User</button>
+            <button class="tab" data-tab="sec-manage">จัดการ User</button>
+            <button class="tab" data-tab="sec-roles">Roles & Auth</button>
+          </div>
+
+          <div class="tab-content active" id="tab-sec-create">
+            <div class="example-card">
+              <div class="example-header">
+                <h3>createUser() — สร้าง User</h3>
+                <button class="run-btn" data-example="createUser">▶ Run</button>
+              </div>
+              <div class="code-block">
+                <pre><code>// สร้าง Admin User
+use admin
+db.createUser({
+  user: "admin",
+  pwd: "strongPassword123!",
+  roles: [
+    { role: "userAdminAnyDatabase", db: "admin" },
+    { role: "readWriteAnyDatabase", db: "admin" }
+  ]
+})
+
+// สร้าง User สำหรับ App
+use myApp
+db.createUser({
+  user: "appUser",
+  pwd: "appPassword",
+  roles: [
+    { role: "readWrite", db: "myApp" },
+    { role: "read", db: "reporting" }
+  ]
+})</code></pre>
+              </div>
+              <div class="result-block hidden" id="result-createUser">
+                <div class="result-header">📋 Result</div>
+                <pre class="result-output"></pre>
+              </div>
+            </div>
+          </div>
+
+          <div class="tab-content" id="tab-sec-manage">
+            <div class="example-card">
+              <div class="example-header">
+                <h3>User Management — จัดการ Users</h3>
+                <button class="run-btn" data-example="manageUser">▶ Run</button>
+              </div>
+              <div class="code-block">
+                <pre><code>// ดู Users ทั้งหมดใน database
+db.getUsers()
+
+// ดูข้อมูล User เฉพาะ
+db.getUser("appUser")
+
+// เปลี่ยนรหัสผ่าน
+db.changeUserPassword("appUser", "newSecurePassword!")
+
+// อัปเดต User (เช่น เปลี่ยน role)
+db.updateUser("appUser", {
+  roles: [
+    { role: "readWrite", db: "myApp" },
+    { role: "readWrite", db: "analytics" }
+  ]
+})
+
+// เพิ่ม Role ให้ User
+db.grantRolesToUser("appUser", [
+  { role: "dbAdmin", db: "myApp" }
+])
+
+// ถอน Role จาก User
+db.revokeRolesFromUser("appUser", [
+  { role: "dbAdmin", db: "myApp" }
+])
+
+// ลบ User
+db.dropUser("appUser")</code></pre>
+              </div>
+              <div class="result-block hidden" id="result-manageUser">
+                <div class="result-header">📋 Result</div>
+                <pre class="result-output"></pre>
+              </div>
+            </div>
+          </div>
+
+          <div class="tab-content" id="tab-sec-roles">
+            <div class="decision-table">
+              <h3>🛡️ Built-in Roles</h3>
+              <table>
+                <thead>
+                  <tr><th>Role</th><th>สิทธิ์</th><th>ใช้เมื่อ</th></tr>
+                </thead>
+                <tbody>
+                  <tr><td><code>read</code></td><td>อ่านข้อมูล</td><td>Report / Analytics</td></tr>
+                  <tr><td><code>readWrite</code></td><td>อ่าน + เขียน</td><td>Application User</td></tr>
+                  <tr><td><code>dbAdmin</code></td><td>จัดการ DB (index, stats)</td><td>DBA</td></tr>
+                  <tr><td><code>userAdmin</code></td><td>จัดการ Users</td><td>Admin</td></tr>
+                  <tr><td><code>clusterAdmin</code></td><td>จัดการ Cluster</td><td>DevOps</td></tr>
+                  <tr><td><code>backup</code></td><td>Backup ข้อมูล</td><td>Backup System</td></tr>
+                  <tr><td><code>root</code></td><td>สิทธิ์ทั้งหมด</td><td>Super Admin</td></tr>
+                </tbody>
+              </table>
+            </div>
+
+            <div class="example-card">
+              <div class="example-header">
+                <h3>Connection String พร้อม Authentication</h3>
+                <button class="run-btn" data-example="connString">▶ Run</button>
+              </div>
+              <div class="code-block">
+                <pre><code>// Local connection with auth
+mongosh "mongodb://appUser:password@localhost:27017/myApp"
+
+// Atlas connection
+mongosh "mongodb+srv://appUser:password@cluster0.xxxxx.mongodb.net/myApp"
+
+// Connection String format
+mongodb://[username:password@]host[:port]/[database][?options]
+
+// ตัวอย่างกับ options
+mongodb://admin:pass@localhost:27017/myApp?authSource=admin&retryWrites=true</code></pre>
+              </div>
+              <div class="result-block hidden" id="result-connString">
+                <div class="result-header">📋 Result</div>
+                <pre class="result-output"></pre>
+              </div>
             </div>
           </div>
         </section>

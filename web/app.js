@@ -34,12 +34,14 @@ document.addEventListener('DOMContentLoaded', () => {
     // Update title
     const titles = {
       overview: 'Overview',
+      basics: 'Basic Concepts',
       crud: 'CRUD Operations',
       query: 'Query Operators',
       aggregation: 'Aggregation Framework',
       indexing: 'Indexing',
       modeling: 'Data Modeling',
       transactions: 'Transactions',
+      security: 'Security & Users',
       mongoose: 'Mongoose ODM'
     };
     pageTitle.textContent = titles[sectionId] || 'Overview';
@@ -95,6 +97,34 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // ===== Run Button — Simulated Results =====
   const exampleResults = {
+    basicCommands: {
+      'show dbs': [
+        { name: 'admin', sizeOnDisk: '40.96 kB' },
+        { name: 'config', sizeOnDisk: '73.73 kB' },
+        { name: 'local', sizeOnDisk: '40.96 kB' },
+        { name: 'myDatabase', sizeOnDisk: '8.19 kB' }
+      ],
+      'show collections': ['users', 'orders', 'products'],
+      'db.stats()': {
+        db: 'myDatabase',
+        collections: 3,
+        objects: 1250,
+        avgObjSize: 128,
+        dataSize: '156.25 kB',
+        indexes: 5
+      }
+    },
+    docStructure: {
+      _id: 'ObjectId("507f1f77bcf86cd799439011")',
+      name: '\u0e2a\u0e21\u0e0a\u0e32\u0e22',
+      age: 25,
+      salary: 'NumberDecimal("55000.50")',
+      isActive: true,
+      hobbies: ['coding', 'gaming'],
+      address: { city: '\u0e01\u0e23\u0e38\u0e07\u0e40\u0e17\u0e1e\u0e2f', zipcode: '10110' },
+      joinDate: 'ISODate("2024-01-15T00:00:00Z")',
+      avatar: null
+    },
     insertOne: {
       acknowledged: true,
       insertedId: 'ObjectId("65a1b2c3d4e5f6a7b8c9d0e1")'
@@ -301,6 +331,46 @@ document.addEventListener('DOMContentLoaded', () => {
       'virtual (fullName)': '"สมชาย ใจดี" (computed, not stored in DB)',
       'static (findByEmail)': 'User.findByEmail("test@email.com") → returns user',
       'instance (isAdmin)': 'user.isAdmin() → false'
+    },
+    createUser: {
+      'Admin User': {
+        ok: 1,
+        user: 'admin',
+        roles: [
+          { role: 'userAdminAnyDatabase', db: 'admin' },
+          { role: 'readWriteAnyDatabase', db: 'admin' }
+        ]
+      },
+      'App User': {
+        ok: 1,
+        user: 'appUser',
+        roles: [
+          { role: 'readWrite', db: 'myApp' },
+          { role: 'read', db: 'reporting' }
+        ]
+      }
+    },
+    manageUser: {
+      'getUsers()': [
+        { user: 'admin', roles: ['userAdminAnyDatabase'] },
+        { user: 'appUser', roles: ['readWrite'] }
+      ],
+      'getUser("appUser")': {
+        user: 'appUser',
+        db: 'myApp',
+        roles: [{ role: 'readWrite', db: 'myApp' }],
+        mechanisms: ['SCRAM-SHA-256']
+      },
+      'changeUserPassword': { ok: 1, message: 'Password changed ✅' },
+      'grantRolesToUser': { ok: 1, message: 'Role dbAdmin granted ✅' },
+      'revokeRolesFromUser': { ok: 1, message: 'Role dbAdmin revoked ✅' },
+      'dropUser': { ok: 1, message: 'User appUser deleted ✅' }
+    },
+    connString: {
+      'Local': 'mongodb://appUser:password@localhost:27017/myApp',
+      'Atlas': 'mongodb+srv://appUser:password@cluster0.xxxxx.mongodb.net/myApp',
+      'Format': 'mongodb://[username:password@]host[:port]/[database][?options]',
+      'With Options': 'mongodb://admin:pass@localhost:27017/myApp?authSource=admin&retryWrites=true'
     }
   };
 
